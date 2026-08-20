@@ -17,13 +17,13 @@
     <h2>単一換字式暗号ツール</h2>
 
     <div class="box-group">
-        <label>変換ルール：元の文字</label>
-        <textarea id="rulePlain">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</textarea>
+        <label>変換ルール：元の文字（例: ABCDEFGHIJKLMNOPQRSTUVWXYZ）</label>
+        <textarea id="rulePlain">ABCDEFGHIJKLMNOPQRSTUVWXYZ</textarea>
     </div>
 
     <div class="box-group">
-        <label>変換ルール：暗号化された文字</label>
-        <textarea id="ruleCipher">QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm</textarea>
+        <label>変換ルール：暗号化された文字（例: QWERTYUIOPASDFGHJKLZXCVBNM）</label>
+        <textarea id="ruleCipher">QWERTYUIOPASDFGHJKLZXCVBNM</textarea>
     </div>
 
     <div class="btn-group">
@@ -55,13 +55,26 @@
             const fromChars = mode === 'encrypt' ? rulePlain : ruleCipher;
             const toChars = mode === 'encrypt' ? ruleCipher : rulePlain;
 
-            // 変換ルールマップ
+            // 変換ルールマップの作成（大文字・小文字を自動補完）
             const charMap = new Map();
             for (let i = 0; i < fromChars.length; i++) {
-                charMap.set(fromChars[i], toChars[i]);
+                const src = fromChars[i];
+                const dst = toChars[i];
+
+                // 入力されたままの対応を追加
+                charMap.set(src, dst);
+
+                // 大文字なら小文字の対応も自動追加
+                if (src >= 'A' && src <= 'Z') {
+                    charMap.set(src.toLowerCase(), dst.toLowerCase());
+                } 
+                // 小文字なら大文字の対応も自動追加
+                else if (src >= 'a' && src <= 'z') {
+                    charMap.set(src.toUpperCase(), dst.toUpperCase());
+                }
             }
 
-            // 1文字ずつ判定・置換
+            // 1文字ずつ置換処理
             const result = Array.from(inputText).map(char => {
                 return charMap.has(char) ? charMap.get(char) : char;
             }).join('');
