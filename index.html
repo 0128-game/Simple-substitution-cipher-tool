@@ -55,17 +55,16 @@
             const fromChars = mode === 'encrypt' ? rulePlain : ruleCipher;
             const toChars = mode === 'encrypt' ? ruleCipher : rulePlain;
 
-            // 変換用マップの作成
+            // 変換ルールマップを作成
             const charMap = new Map();
             for (let i = 0; i < fromChars.length; i++) {
                 charMap.set(fromChars[i], toChars[i]);
             }
 
-            // テキストの置換処理
-            let result = '';
-            for (let char of inputText) {
-                result += charMap.has(char) ? charMap.get(char) : char;
-            }
+            // 入力テキストを配列化し、1文字ずつ確実に全文字チェック・変換
+            const result = Array.from(inputText).map(char => {
+                return charMap.has(char) ? charMap.get(char) : char;
+            }).join('');
 
             document.getElementById('outputText').value = result;
         }
