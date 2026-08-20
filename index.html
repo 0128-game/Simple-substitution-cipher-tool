@@ -55,7 +55,7 @@
             const fromChars = mode === 'encrypt' ? rulePlain : ruleCipher;
             const toChars = mode === 'encrypt' ? ruleCipher : rulePlain;
 
-            // 変換ルールマップを作成
+            // 変換ルールマップ
             const charMap = new Map();
             for (let i = 0; i < fromChars.length; i++) {
                 charMap.set(fromChars[i], toChars[i]);
